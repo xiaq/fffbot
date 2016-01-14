@@ -103,6 +103,12 @@ class Stake(object):
         return stake_commands[cmd](self, *args)
 
 
+def make_name(from_):
+    if 'last_name' not in from_:
+        return from_['first_name']
+    return from_['first_name'] + ' ' + from_['last_name']
+
+
 class FFFBot(object):
     def __init__(self, token):
         self.token = token
@@ -133,8 +139,7 @@ class FFFBot(object):
             self.stakes[id_] = Stake()
         stake = self.stakes[id_]
         # uh
-        stake.from_str = '%s %s' % (msg['from']['first_name'],
-                                    msg['from']['last_name'])
+        stake.from_str = make_name(msg['from'])
         return stake.react(*fields[1:])
 
     def main_loop(self):
