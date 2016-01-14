@@ -90,7 +90,7 @@ class Stake(object):
         if self.state != 'ignited':
             return self.status_desc
         self.state = 'idle'
-        return u'%s 英勇地解救了 %s。' % (
+        return u'%s 突然解救了 %s。我们中出了一个叛徒！' % (
             self.from_str, self.people_str)
 
     @command
