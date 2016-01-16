@@ -84,7 +84,7 @@ func (s *Stake) stateDesc() string {
 	case idle:
 		return "火刑柱上现在什么都没有。"
 	case installed:
-		return fmt.Sprint("火刑柱上现在绑着 %s。", s.peopleStr)
+		return fmt.Sprintf("火刑柱上现在绑着 %s。", s.peopleStr)
 	case ignited:
 		return fmt.Sprintf("%s 正在熊熊燃烧。", s.peopleStr)
 	default:
