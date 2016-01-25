@@ -183,5 +183,5 @@ func main() {
 	}
 	token := strings.TrimSpace(string(buf))
 
-	NewFFFBot("xiaqsbot", token).Main()
+	NewFFFBot("xiaqsfffbot", token).Main()
 }
