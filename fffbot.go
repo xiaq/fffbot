@@ -170,8 +170,8 @@ func (b *FFFBot) handleFFF(_ *tg.CommandBot, text string, msg *tg.Message) {
 	}, nil)
 }
 
-func NewFFFBot(name, token string) *FFFBot {
-	b := &FFFBot{tg.NewCommandBot(name, token), make(map[int]*Stake)}
+func NewFFFBot(token string) *FFFBot {
+	b := &FFFBot{tg.NewCommandBot(token), make(map[int]*Stake)}
 	b.OnCommand("fff", b.handleFFF)
 	return b
 }
@@ -183,5 +183,5 @@ func main() {
 	}
 	token := strings.TrimSpace(string(buf))
 
-	NewFFFBot("xiaqsfffbot", token).Main()
+	NewFFFBot(token).Main()
 }
