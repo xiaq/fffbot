@@ -7,6 +7,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/mattn/go-shellwords"
 	"github.com/xiaq/tg"
 )
 
@@ -142,7 +143,7 @@ func (s *Stake) status(args []string, from *tg.User) string {
 
 type FFFBot struct {
 	*tg.CommandBot
-	stakes map[int]*Stake
+	stakes map[int64]*Stake
 }
 
 func (b *FFFBot) handleFFF(_ *tg.CommandBot, text string, msg *tg.Message) {
@@ -160,9 +161,13 @@ func (b *FFFBot) handleFFF(_ *tg.CommandBot, text string, msg *tg.Message) {
 	if cmd == "help" || !ok {
 		reply = help
 	} else {
-		argList := strings.Split(args, " ")
-		log.Println(cmd, cm.method, msg.From)
-		reply = cm.method(b.stakes[chatID], argList, msg.From)
+		argList, err := shellwords.Parse(args)
+		if err != nil {
+			reply = "滚。"
+		} else {
+			log.Println(cmd, cm.method, msg.From)
+			reply = cm.method(b.stakes[chatID], argList, msg.From)
+		}
 	}
 	b.Get("/sendMessage", tg.Query{
 		"chat_id": msg.Chat.ID,
@@ -171,7 +176,7 @@ func (b *FFFBot) handleFFF(_ *tg.CommandBot, text string, msg *tg.Message) {
 }
 
 func NewFFFBot(token string) *FFFBot {
-	b := &FFFBot{tg.NewCommandBot(token), make(map[int]*Stake)}
+	b := &FFFBot{tg.NewCommandBot(token), make(map[int64]*Stake)}
 	b.OnCommand("fff", b.handleFFF)
 	return b
 }
