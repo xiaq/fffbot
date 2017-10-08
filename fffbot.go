@@ -27,6 +27,10 @@ var commands = []commandMeta{
 	{"help", nil, "", "命令帮助"},
 }
 
+var banned = map[int64]bool{
+	44785003: true, // chinanet
+}
+
 var commandMap map[string]*commandMeta
 
 func (cm *commandMeta) help() string {
@@ -149,6 +153,10 @@ type FFFBot struct {
 func (b *FFFBot) handleFFF(_ *tg.CommandBot, text string, msg *tg.Message) {
 	cmd, args := tg.Split(text, ' ')
 	log.Println("fff", cmd, args)
+	if msg.From != nil && banned[msg.From.ID] {
+		log.Println("user is banned:", msg.From)
+		return
+	}
 	chatID := msg.Chat.ID
 	if b.stakes[chatID] == nil {
 		b.stakes[chatID] = &Stake{}
